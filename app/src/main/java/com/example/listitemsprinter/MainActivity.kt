@@ -5,10 +5,12 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ProductAdapter.OnProductCheckedChangeListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ProductAdapter
     private lateinit var productList: List<Product>
+
+    private val checkedProducts = mutableListOf<Product>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,8 +22,16 @@ class MainActivity : AppCompatActivity() {
         productList = generateDummyData()
         // Add your Product objects to the productList here
 
-        adapter = ProductAdapter(productList, this)
+        adapter = ProductAdapter(productList, this, this)
         recyclerView.adapter = adapter
+    }
+
+    override fun onProductCheckedChange(product: Product, isChecked: Boolean) {
+        if (isChecked) {
+            checkedProducts.add(product)
+        } else {
+            checkedProducts.remove(product)
+        }
     }
 
 
